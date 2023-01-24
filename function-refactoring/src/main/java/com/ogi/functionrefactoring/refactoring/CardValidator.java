@@ -6,8 +6,8 @@ import java.time.LocalDate;
 
 public class CardValidator {
 
-    Boolean validateCard(String cardNumber, Integer expYear, Integer expMonth) {
-        return isChecksumValid(cardNumber) && isMonthYearValid(expYear, expMonth);
+    Boolean validateCard(Card card) {
+        return isChecksumValid(card.getNumber()) && isMonthYearValid(card.getExpYear(), card.getExpMonth());
     }
 
     private static boolean isMonthYearValid(int expYear, int expMonth) {
@@ -34,12 +34,13 @@ public class CardValidator {
         Customer customer = new Customer();
         customer.setName("Alice");
         customer.setPhone("2341");
-        customer.setNumber("1249190007575069");
-        customer.setExpMonth(1);
-        customer.setExpYear(2024);
+        Card card = new Card();
+        card.setNumber("1249190007575069");
+        card.setExpMonth(1);
+        card.setExpYear(2024);
+        customer.setCard(card);
 
-        customer.setValid(cardValidator.validateCard(
-                customer.getNumber(), customer.getExpYear(), customer.getExpMonth()));
+        customer.setValid(cardValidator.validateCard(customer.getCard()));
         System.out.println("Is Alice's card valid?");
         System.out.println(customer.isValid());
         System.out.println(customer);
@@ -50,9 +51,14 @@ public class CardValidator {
     static class Customer {
         String name;
         String phone;
+        Card card;
+        boolean valid = false;
+    }
+
+    @Data
+    private static class Card {
         String number;
         Integer expMonth;
         Integer expYear;
-        boolean valid = false;
     }
 }
