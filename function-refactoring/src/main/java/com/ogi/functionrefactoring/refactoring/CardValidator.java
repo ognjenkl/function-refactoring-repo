@@ -7,10 +7,21 @@ import java.time.LocalDate;
 public class CardValidator {
 
     Boolean validateCard(Customer customer) {
+        customer.setValid(isChecksumValid(customer) && isMonthYearValid(customer));
+        return customer.isValid();
+
+    }
+
+    private static boolean isMonthYearValid(Customer customer) {
+        return LocalDate.of(
+                customer.getExpYear(), customer.getExpMonth(), 1).isAfter(LocalDate.now());
+    }
+
+    private boolean isChecksumValid(Customer customer) {
         String cardNumber = customer.getNumber();
-        Integer checksum = 0;
+        int checksum = 0;
         for (int i = 0; i < cardNumber.length(); i++) {
-            Integer digit = Integer.parseInt(cardNumber.substring(i, i + 1));
+            int digit = Integer.parseInt(cardNumber.substring(i, i + 1));
             if (i % 2 == 0) {
                 digit *= 2;
                 if (digit > 9) {
@@ -19,14 +30,7 @@ public class CardValidator {
             }
             checksum += digit;
         }
-
-        boolean monthYearValid = LocalDate.of(
-                customer.getExpYear(), customer.getExpMonth(), 1).isAfter(LocalDate.now());
-        customer.setValid(checksum % 10 == 0 && monthYearValid);
-
-
-        return customer.isValid();
-
+        return checksum % 10 == 0;
     }
 
     public static void main(String[] args) {
