@@ -19,11 +19,11 @@ public class Payment {
 
     public static void main(String[] args) {
         Payment payment = new Payment();
-        payment.orderFood(List.of("burger", "fries", "shake"));
+        payment.orderFood(List.of("burger", "fries", "shake"), new StripePaymentHandler());
     }
 
 
-    public void orderFood(List<String> itemList) {
+    public void orderFood(List<String> itemList, StripePaymentHandler paymentHandler) {
         double total = 0;
         for (String item : itemList) {
             total += pricesMap.get(item);
@@ -31,7 +31,6 @@ public class Payment {
 
         System.out.printf("Total: $%.2f\n", total);
 
-        StripePaymentHandler paymentHandler = new StripePaymentHandler();
         paymentHandler.handlePayment(total);
 
         System.out.println("Order completed.");
