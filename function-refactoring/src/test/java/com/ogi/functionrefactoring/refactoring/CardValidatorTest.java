@@ -20,7 +20,7 @@ class CardValidatorTest {
     }
 
     @Test
-    void test() {
+    void givenCardValidator_whenValidateCard_thenCardValid() {
         String expected = """
                 Is Alice's card valid?\r
                 true\r
