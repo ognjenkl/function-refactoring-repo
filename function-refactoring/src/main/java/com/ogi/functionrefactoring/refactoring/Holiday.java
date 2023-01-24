@@ -12,7 +12,11 @@ public class Holiday {
         employee.setRole(Role.ENGINEER);
         employee.setVacationDays(25);
 
-        employee.takeHoliday(1, Boolean.parseBoolean(args[0]));
+        if (Boolean.parseBoolean(args[0])) {
+            employee.payoutHoliday();
+        } else {
+            employee.nonPayoutHoliday(1);
+        }
     }
 
     @Data
@@ -21,23 +25,23 @@ public class Holiday {
         Role role;
         int vacationDays;
 
-        public void takeHoliday(int numberOfDays, boolean payout) {
-            if (payout) {
-                if (vacationDays < FIXED_VACATION_DAYS_PAYOUT) {
-                    throw new IllegalArgumentException(
-                            String.format("You don't have enough holidays left over for a payout. "
-                                    + "Remaining holidays: %d.", vacationDays));
-                }
-                vacationDays -= FIXED_VACATION_DAYS_PAYOUT;
-                System.out.printf("Paying out a holiday. Holidays left: %d%n", vacationDays);
-            } else {
-                if (vacationDays < numberOfDays) {
-                    throw new IllegalArgumentException("You don't have any holidays left. "
-                            + "Now back to work, you!");
-                }
-                vacationDays -= numberOfDays;
-                System.out.println("Have fun on your holiday. Don't forget to check your emails!");
+        private void nonPayoutHoliday(int numberOfDays) {
+            if (vacationDays < numberOfDays) {
+                throw new IllegalArgumentException("You don't have any holidays left. "
+                        + "Now back to work, you!");
             }
+            vacationDays -= numberOfDays;
+            System.out.println("Have fun on your holiday. Don't forget to check your emails!");
+        }
+
+        private void payoutHoliday() {
+            if (vacationDays < FIXED_VACATION_DAYS_PAYOUT) {
+                throw new IllegalArgumentException(
+                        String.format("You don't have enough holidays left over for a payout. "
+                                + "Remaining holidays: %d.", vacationDays));
+            }
+            vacationDays -= FIXED_VACATION_DAYS_PAYOUT;
+            System.out.printf("Paying out a holiday. Holidays left: %d%n", vacationDays);
         }
     }
 
