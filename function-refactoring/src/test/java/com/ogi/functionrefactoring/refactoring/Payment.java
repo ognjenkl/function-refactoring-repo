@@ -23,7 +23,7 @@ public class Payment {
     }
 
 
-    public void orderFood(List<String> itemList, StripePaymentHandler paymentHandler) {
+    public void orderFood(List<String> itemList, PaymentHandler paymentHandler) {
         double total = 0;
         for (String item : itemList) {
             total += pricesMap.get(item);
@@ -36,8 +36,10 @@ public class Payment {
         System.out.println("Order completed.");
     }
 
-    static class StripePaymentHandler {
-        void handlePayment(double amount) {
+    static class StripePaymentHandler implements PaymentHandler {
+
+        @Override
+        public void handlePayment(double amount) {
             System.out.printf("Charging $%.2f using Stripe\n", amount);
         }
     }
